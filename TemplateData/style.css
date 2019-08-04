@@ -25,8 +25,8 @@ body, html{
 #gameContainer canvas{
     position:absolute;
     transform:translate(-50%, -50%);
-    top:50%;
-    left:50%;
+    top:100%;
+    left:100%;
 
 }
 
@@ -40,7 +40,7 @@ body, html{
     font-family:sans-serif;
 
     /*want to remove the simmer branding? uncomment display:none below!*/
-    /*display:none;*/
+    display:none;
 }
 
 .simmer a{
