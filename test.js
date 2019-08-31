@@ -28,13 +28,10 @@ camera.position.z = -20;
 
 var animate = function () {
 
-    cube.rotation.x = 0;
-    cube.rotation.y = 0;
+    cube.rotation.x += 0.05;
+    cube.rotation.y += 0.05;
     cube.position.y = 2;
     line.position.z = 5;
-
-    light.rotation.x += 0.1;
-    light.rotation.y += 0.1;
 
     camera.lookAt(new THREE.Vector3(0, 0, 20));
 
