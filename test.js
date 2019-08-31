@@ -58,9 +58,9 @@ loader.load(
 
 
 // Alternatively, to parse a previously loaded JSON structure
-var object = loader.parse( a_json_object );
+var bunny = loader.parse( a_json_object );
 
-scene.add( object );
+scene.add( bunny );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
