@@ -67,7 +67,7 @@ scene.add( bunny );
 var animate = function () {
 
     cube.rotation.x = 45;
-    cube.rotation.y = 45;
+    cube.rotation.y += 0.1;
     line.position.z = 5;
 
     light.rotation.x += 0.1;
