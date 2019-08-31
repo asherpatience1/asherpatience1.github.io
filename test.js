@@ -24,7 +24,7 @@ var line = new THREE.Line(geo2, mat2);
 line.position = new THREE.Vector3(0,0,30);
 scene.add(line);
 
-camera.position.z = -5;
+camera.position.z = -10;
 
 var light = new THREE.DirectionalLight(0xffeedd);
 light.position = new THREE.Vector3(0,1000,0);   
@@ -32,8 +32,9 @@ scene.add(light);
 
 var animate = function () {
 
-    cube.rotation.x = 45;
-    cube.rotation.y = 45;
+    cube.rotation.x = 0;
+    cube.rotation.y = 0;
+    cube.position.y = 2;
     line.position.z = 5;
 
     light.rotation.x += 0.1;
