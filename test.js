@@ -24,7 +24,7 @@ var line = new THREE.Line(geo2, mat2);
 line.position = new THREE.Vector3(0,0,30);
 scene.add(line);
 
-camera.position.z = -10;
+camera.position.z = -5;
 
 var light = new THREE.DirectionalLight(0xffeedd);
 light.position = new THREE.Vector3(0,1000,0);   
