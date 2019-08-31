@@ -73,6 +73,9 @@ var animate = function () {
     light.rotation.x += 0.1;
     light.rotation.y += 0.1;
 
+    bunny.position.z += 0.01;
+    cube.position.z += 0.01;
+
     camera.lookAt(new THREE.Vector3(0, 0, 20));
 
     requestAnimationFrame( animate );
