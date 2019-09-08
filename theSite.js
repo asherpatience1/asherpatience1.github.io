@@ -5,6 +5,17 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+renderer.autoClear = false;
+composer = new THREE.EffectComposer(renderer);
+var sunRenderModel = new THREE.RenderPass(scene, camera);
+var effectBloom = new THREE.BloomPass(0.25, 25, 5);
+var sceneRenderModel = new THREE.RenderPass(scene, camera);
+var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+effectCopy.renderToScreen = true;
+composer.addPass(sunRenderModel);
+composer.addPass(effectBloom);
+composer.addPass(effectCopy);
+
 window.addEventListener("resize", function (){
 
     var width = window.innerWidth;
@@ -21,6 +32,8 @@ window.addEventListener("resize", function (){
 window.addEventListener( 'mousemove', onMouseMove, false );
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
+var rayMouse = new THREE.Vector2(0,0);
+var rayRate = 0.025;
 
 function onMouseMove( event ) {
 
@@ -62,7 +75,7 @@ texLoader.load("back.jpg", function(texture){
 
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
-    color: 0x33ccff,
+    color: 0xffffff,
     wireframe: true
 });
 var mesh = new THREE.Mesh(geometry, material);
@@ -117,7 +130,9 @@ var ticker = 0;
 var update = function(){
 
     // RAY
-    raycaster.setFromCamera( mouse, camera );
+    rayMouse.x += (mouse.x-rayMouse.x)*rayRate;
+    rayMouse.y += (mouse.y-rayMouse.y)*rayRate;
+    raycaster.setFromCamera( rayMouse, camera );
 
 	// calculate objects intersecting the picking ray
 	var intersects = raycaster.intersectObjects( scene.children );
@@ -126,8 +141,6 @@ var update = function(){
 
 		rayPos.x = intersects[i].point.x;
         rayPos.y = intersects[i].point.z;
-
-        console.log(rayPos.x+" - "+rayPos.y);
 
     }
     
@@ -184,7 +197,7 @@ var GameLoop = function (){
 
     update();
 
-    render();
+    composer.render();
 
 }
 
