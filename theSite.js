@@ -62,7 +62,7 @@ texLoader.load("back.jpg", function(texture){
 
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
-    color: 0x0000ff,
+    color: 0x33ccff,
     wireframe: true
 });
 var mesh = new THREE.Mesh(geometry, material);
@@ -133,7 +133,7 @@ var update = function(){
     
     // UPDATE TARGETS
     ticker ++;
-    if (ticker % 10 == 0){
+    if (ticker % 1 == 0){
 
         for (var x = 0;x < geometry.vertices.length;x++){
 
