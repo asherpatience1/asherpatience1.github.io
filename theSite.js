@@ -1,5 +1,11 @@
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1, 10000);
+const scene = new THREE.Scene();
+{
+  const color = 0x3876E8;
+  const near = 10;
+  const far = 50;
+  scene.fog = new THREE.Fog(color, near, far);
+}
+var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 10000);
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -8,13 +14,22 @@ document.body.appendChild(renderer.domElement);
 renderer.autoClear = false;
 composer = new THREE.EffectComposer(renderer);
 var sunRenderModel = new THREE.RenderPass(scene, camera);
-var effectBloom = new THREE.BloomPass(0.25, 25, 5);
+var effectBloom = new THREE.BloomPass(1, 25, 10);
 var sceneRenderModel = new THREE.RenderPass(scene, camera);
 var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
 effectCopy.renderToScreen = true;
 composer.addPass(sunRenderModel);
-composer.addPass(effectBloom);
+// composer.addPass(effectBloom);
 composer.addPass(effectCopy);
+
+// var bokehPass = new THREE.BokehPass( scene, camera, {
+//     focus: 4,
+//     aperture:	2.2,
+//     maxblur:	1,
+//     width: window.innerWidth,
+//     height: window.innerHeight
+// } );
+// composer.addPass(bokehPass);
 
 window.addEventListener("resize", function (){
 
@@ -28,32 +43,15 @@ window.addEventListener("resize", function (){
 
 });
 
-// Mouse
-window.addEventListener( 'mousemove', onMouseMove, false );
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
-var rayMouse = new THREE.Vector2(0,0);
-var rayRate = 0.025;
-
-function onMouseMove( event ) {
-
-	// calculate mouse position in normalized device coordinates
-	// (-1 to +1) for both components
-
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-camera.position.z = 36;
-camera.position.y = 6;
+camera.position.z = 10;
+camera.position.y = 0;
 camera.position.x = 10;
 camera.lookAt(new THREE.Vector3(10,-12,0));
 
-var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-scene.add(ambientLight);
+// var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+// scene.add(ambientLight);
 
 // var loader = new THREE.OBJLoader();
 // var theGrid;
@@ -65,7 +63,7 @@ scene.add(ambientLight);
 // });
 
 var texLoader = new THREE.TextureLoader();
-texLoader.load("back.jpg", function(texture){
+texLoader.load("back.png", function(texture){
 
              scene.background = texture;  
 
@@ -73,11 +71,23 @@ texLoader.load("back.jpg", function(texture){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var geo1 = new THREE.SphereGeometry(0.1, 9, 9);
+var geoMat = new THREE.MeshBasicMaterial({
+    color: 0xFFFFFF,
+    wireframe: false
+});
+var sphere1 = new THREE.Mesh(geo1, geoMat);
+sphere1.position.set(10,10,10);
+scene.add(sphere1);
+
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
+    color: 0x00316C,
     wireframe: true
 });
+
+//3876E8
+
 var mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
@@ -86,8 +96,14 @@ var xSize = 40;
 var ySize = 70;
 var startPos = [];
 var targetPos = [];
-var smoothRate = 0.05;
+var smoothRate = 0.025;
+var meshSmoothRate = 0.015;
 var scaler = 0.5;
+var meshTarget = new THREE.Vector3(10,0,10);
+var meshCurr = new THREE.Vector3(0,0,0);
+var camOffset = new THREE.Vector3(0,7,9);
+var camFollowRate = 0.02;
+var sphereRate = 0.015;
 for (var x = 0;x < xSize;x++){
 
     for (var y = 0;y < ySize;y++){
@@ -120,50 +136,71 @@ for (var x = 0;x < xSize;x++){
 
 }
 
-var raycaster = new THREE.Raycaster();
-var rayPos = new THREE.Vector2();
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var ticker = 0;
-
 var update = function(){
 
-    // RAY
-    rayMouse.x += (mouse.x-rayMouse.x)*rayRate;
-    rayMouse.y += (mouse.y-rayMouse.y)*rayRate;
-    raycaster.setFromCamera( rayMouse, camera );
+    ticker ++;
+    if (ticker > 200){
 
-	// calculate objects intersecting the picking ray
-	var intersects = raycaster.intersectObjects( scene.children );
+        camOffset = new THREE.Vector3(
+            (Math.random()*6)-3,
+            ((Math.random()*4)-2)+6,
+            ((Math.random()*4)-2)+8
+        );
 
-	for ( var i = 0; i < intersects.length; i++ ) {
+        meshTarget = new THREE.Vector3(
+            (Math.random()*16)+2,
+            0,
+            (Math.random()*16)+2
+        );
 
-		rayPos.x = intersects[i].point.x;
-        rayPos.y = intersects[i].point.z;
+        ticker -= 200;
 
     }
-    
+
+    var castPos = new THREE.Vector3(sphere1.position.x,sphere1.position.y-0.2,sphere1.position.z);    
+    var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
+    var intersects = raycaster.intersectObjects(scene.children);
+
+    if (intersects.length > 0){
+
+        sphere1.position.y = intersects[0].point.y + 1;
+
+    }
+
+    camera.position.x = camera.position.x+(((meshTarget.x+camOffset.x)-camera.position.x)*camFollowRate),
+    camera.position.y = camera.position.y+(((meshTarget.y+camOffset.y)-camera.position.y)*camFollowRate),
+    camera.position.z = camera.position.z+(((meshTarget.z+camOffset.z)-camera.position.z)*camFollowRate)
+
+    camera.lookAt(new THREE.Vector3(
+        meshCurr.x,
+        meshCurr.y+3,
+        meshCurr.z
+    ));
+
+    meshCurr = new THREE.Vector3(
+        meshCurr.x+((meshTarget.x-meshCurr.x)*meshSmoothRate),
+        0,
+        meshCurr.z+((meshTarget.z-meshCurr.z)*meshSmoothRate)
+    );
+
     // UPDATE TARGETS
-    ticker ++;
-    if (ticker % 1 == 0){
+    for (var x = 0;x < geometry.vertices.length;x++){
 
-        for (var x = 0;x < geometry.vertices.length;x++){
+        targetPos[x] = new THREE.Vector3(startPos[x].x,startPos[x].y,startPos[x].z);
+        // targetPos[x].x += (Math.random()-0.5)*0.2;
+        // targetPos[x].y += (Math.random()-0.5)*0.2;
+        // targetPos[x].z += (Math.random()-0.5)*0.2;
 
-            targetPos[x] = new THREE.Vector3(startPos[x].x,startPos[x].y,startPos[x].z);
-            targetPos[x].x += (Math.random()-0.5)*0.2;
-            targetPos[x].y += (Math.random()-0.5)*0.2;
-            targetPos[x].z += (Math.random()-0.5)*0.2;
+        var totalDist = startPos[x].distanceTo(new THREE.Vector3(meshCurr.x,0,meshCurr.z));
 
-            var totalDist = startPos[x].distanceTo(new THREE.Vector3(rayPos.x,0,rayPos.y));
+        var newPos = 3-totalDist;
+        // newPos *= 2;
+        if (newPos < 0){newPos = 0;}
 
-            var newPos = 3-totalDist;
-            // newPos *= 2;
-            if (newPos < 0){newPos = 0;}
-
-            targetPos[x].y += newPos;
-
-        }
+        targetPos[x].y += newPos;
 
     }
 
@@ -197,7 +234,7 @@ var GameLoop = function (){
 
     update();
 
-    composer.render();
+    composer.render(0.1);
 
 }
 
