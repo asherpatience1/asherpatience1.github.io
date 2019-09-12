@@ -9,6 +9,72 @@ const scene = new THREE.Scene();
 // }
 var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 10000);
 
+window.addEventListener( 'mousedown', onMouseMove, false );
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
+
+var aboutPos = new THREE.Vector3(5,1,5);
+var contactPos = new THREE.Vector3(14,1,12);
+var servicesPos = new THREE.Vector3(16,1,7);
+var industriesPos = new THREE.Vector3(6,1,18);
+
+function onMouseMove( event ) {
+
+	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    raycaster.setFromCamera( mouse, camera );
+    var intersects = raycaster.intersectObjects( scene.children );
+
+    for ( var i = 0; i < intersects.length; i++ ) {
+
+        if (intersects[i].object == plnAbout){
+
+            camOffset.x = (Math.random()*6)-3;
+            meshTarget = aboutPos;
+
+        }
+
+        if (intersects[i].object == plnContact){
+
+            camOffset.x = (Math.random()*6)-3;
+            meshTarget = contactPos;
+
+        }
+
+        if (intersects[i].object == plnServices){
+
+            camOffset.x = (Math.random()*6)-3;
+            meshTarget = servicesPos;
+
+        }
+
+        if (intersects[i].object == plnIndustries){
+
+            camOffset.x = (Math.random()*6)-3;
+            meshTarget = industriesPos;
+
+        }
+
+	}
+
+}
+
+function SphereCasts(){
+
+    var castPos = new THREE.Vector3(aboutSphere.position.x,aboutSphere.position.y-0.1,aboutSphere.position.z);    
+    var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0){
+        aboutSphere.position.y = intersects[0].point.y + 0.3;
+    }
+
+}
+
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -16,7 +82,7 @@ document.body.appendChild(renderer.domElement);
 renderer.autoClear = false;
 composer = new THREE.EffectComposer(renderer);
 var sunRenderModel = new THREE.RenderPass(scene, camera);
-var effectBloom = new THREE.BloomPass(1.25, 17.5, 10);
+var effectBloom = new THREE.BloomPass(1, 17.5, 10);
 var sceneRenderModel = new THREE.RenderPass(scene, camera);
 var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
 effectCopy.renderToScreen = true;
@@ -73,14 +139,29 @@ texLoader.load("back.jpg", function(texture){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var geo1 = new THREE.SphereGeometry(0.1, 9, 9);
-var geoMat = new THREE.MeshBasicMaterial({
-    color: 0xFFFFFF,
-    wireframe: false
-});
-var sphere1 = new THREE.Mesh(geo1, geoMat);
-sphere1.position.set(10,10,10);
-scene.add(sphere1);
+var aboutSphereGeo = new THREE.SphereGeometry(0.05, 9, 9);
+var aboutSphereMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: false});
+var aboutSphere = new THREE.Mesh(aboutSphereGeo, aboutSphereMat);
+aboutSphere.position.set(aboutPos.x,aboutPos.y,aboutPos.z);
+scene.add(aboutSphere);
+
+var contactSphereGeo = new THREE.SphereGeometry(0.05, 9, 9);
+var contactSphereMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: false});
+var contactSphere = new THREE.Mesh(contactSphereGeo, contactSphereMat);
+contactSphere.position.set(contactPos.x,contactPos.y,contactPos.z);
+scene.add(contactSphere);
+
+var servicesSphereGeo = new THREE.SphereGeometry(0.05, 9, 9);
+var servicesSphereMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: false});
+var servicesSphere = new THREE.Mesh(servicesSphereGeo, servicesSphereMat);
+servicesSphere.position.set(servicesPos.x,servicesPos.y,servicesPos.z);
+scene.add(servicesSphere);
+
+var industriesSphereGeo = new THREE.SphereGeometry(0.05, 9, 9);
+var industriesSphereMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: false});
+var industriesSphere = new THREE.Mesh(industriesSphereGeo, industriesSphereMat);
+industriesSphere.position.set(industriesPos.x,industriesPos.y,industriesPos.z);
+scene.add(aboutSphere);
 
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
@@ -101,7 +182,7 @@ var targetPos = [];
 var smoothRate = 0.025;
 var meshSmoothRate = 0.015;
 var scaler = 0.5;
-var meshTarget = new THREE.Vector3(10,0,10);
+var meshTarget = aboutPos;
 var meshCurr = new THREE.Vector3(10,0,10);
 var camOffset = new THREE.Vector3(0,3,3);
 var camFollowRate = 0.02;
@@ -138,35 +219,69 @@ for (var x = 0;x < xSize;x++){
 
 }
 
-var plnGeo = new THREE.PlaneGeometry(0.9,0.3,2,2);
-const loader = new THREE.TextureLoader();
-const plnMat = new THREE.MeshBasicMaterial({map: loader.load('logo.png'),});
+var plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+var loader = new THREE.TextureLoader();
+var plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONABOUT.png'),});
 plnMat.transparent = true;
-var pln = new THREE.Mesh(plnGeo, plnMat);
-// scene.add(pln);
-pln.parent = camera;
+var plnAbout = new THREE.Mesh(plnGeo, plnMat);
+scene.add(plnAbout);
+plnAbout.parent = camera;
 
-pln.position.x = 0;
-pln.position.y = 0.7;
-pln.position.z = -2;
-pln.rotation.x = 0;
-pln.rotation.y = 0;
-pln.rotation.z = 0;
+plnAbout.position.x = -0.15;
+plnAbout.position.y = 0.4;
+plnAbout.position.z = -2;
+plnAbout.rotation.x = 0;
+plnAbout.rotation.y = 0;
+plnAbout.rotation.z = 0;
+
+plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONINDUSTRIES.png'),});
+plnMat.transparent = true;
+var plnIndustries = new THREE.Mesh(plnGeo, plnMat);
+scene.add(plnIndustries);
+plnIndustries.parent = camera;
+
+plnIndustries.position.x = 0.05;
+plnIndustries.position.y = 0.4;
+plnIndustries.position.z = -2;
+plnIndustries.rotation.x = 0;
+plnIndustries.rotation.y = 0;
+plnIndustries.rotation.z = 0;
+
+plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONCONTACT.png'),});
+plnMat.transparent = true;
+var plnContact = new THREE.Mesh(plnGeo, plnMat);
+scene.add(plnContact);
+plnContact.parent = camera;
+
+plnContact.position.x = 0.15;
+plnContact.position.y = 0.2;
+plnContact.position.z = -2;
+plnContact.rotation.x = 0;
+plnContact.rotation.y = 0;
+plnContact.rotation.z = 0;
+
+plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONSERVICES.png'),});
+plnMat.transparent = true;
+var plnServices = new THREE.Mesh(plnGeo, plnMat);
+scene.add(plnServices);
+plnServices.parent = camera;
+
+plnServices.position.x = -0.05;
+plnServices.position.y = 0.2;
+plnServices.position.z = -2;
+plnServices.rotation.x = 0;
+plnServices.rotation.y = 0;
+plnServices.rotation.z = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var ticker = 0;
 var update = function(){
 
-    var castPos = new THREE.Vector3(sphere1.position.x,sphere1.position.y-0.2,sphere1.position.z);    
-    var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
-    var intersects = raycaster.intersectObjects(scene.children);
-
-    if (intersects.length > 0){
-
-        sphere1.position.y = intersects[0].point.y + 0.3;
-
-    }
+    SphereCasts();
 
     camera.position.x = camera.position.x+(((meshTarget.x+camOffset.x)-camera.position.x)*camFollowRate),
     camera.position.y = camera.position.y+(((meshTarget.y+camOffset.y)-camera.position.y)*camFollowRate),
@@ -177,6 +292,8 @@ var update = function(){
         meshCurr.y+1.75,
         meshCurr.z
     ));
+
+    // camera.lookAt(new THREE.Vector3(10,2,10));
 
     meshCurr = new THREE.Vector3(
         meshCurr.x+((meshTarget.x-meshCurr.x)*meshSmoothRate),
@@ -222,12 +339,6 @@ var update = function(){
     if (ticker > 200){
 
         camOffset.x = (Math.random()*6)-3;
-
-        meshTarget = new THREE.Vector3(
-            (Math.random()*16)+2,
-            0,
-            (Math.random()*16)+2
-        );
 
         ticker -= 200;
 
