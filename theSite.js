@@ -1,3 +1,5 @@
+const canvas = document.querySelector('#c');
+
 const scene = new THREE.Scene();
 // {
 //   const color = 0x3876E8;
@@ -46,8 +48,8 @@ window.addEventListener("resize", function (){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 camera.position.z = 10;
-camera.position.y = 3;
-camera.position.x = 3;
+camera.position.y = 5;
+camera.position.x = 3.5;
 camera.lookAt(new THREE.Vector3(10,0,0));
 
 // var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
@@ -63,7 +65,7 @@ camera.lookAt(new THREE.Vector3(10,0,0));
 // });
 
 var texLoader = new THREE.TextureLoader();
-texLoader.load("back.png", function(texture){
+texLoader.load("back.jpg", function(texture){
 
              scene.background = texture;  
 
@@ -136,29 +138,25 @@ for (var x = 0;x < xSize;x++){
 
 }
 
+var plnGeo = new THREE.PlaneGeometry(0.9,0.3,2,2);
+const loader = new THREE.TextureLoader();
+const plnMat = new THREE.MeshBasicMaterial({map: loader.load('logo.png'),});
+plnMat.transparent = true;
+var pln = new THREE.Mesh(plnGeo, plnMat);
+// scene.add(pln);
+pln.parent = camera;
+
+pln.position.x = 0;
+pln.position.y = 0.7;
+pln.position.z = -2;
+pln.rotation.x = 0;
+pln.rotation.y = 0;
+pln.rotation.z = 0;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var ticker = 0;
 var update = function(){
-
-    ticker ++;
-    if (ticker > 200){
-
-        camOffset = new THREE.Vector3(
-            (Math.random()*6)-3,
-            3,
-            3
-        );
-
-        meshTarget = new THREE.Vector3(
-            (Math.random()*16)+2,
-            0,
-            (Math.random()*16)+2
-        );
-
-        ticker -= 200;
-
-    }
 
     var castPos = new THREE.Vector3(sphere1.position.x,sphere1.position.y-0.2,sphere1.position.z);    
     var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
@@ -166,7 +164,7 @@ var update = function(){
 
     if (intersects.length > 0){
 
-        sphere1.position.y = intersects[0].point.y + 1;
+        sphere1.position.y = intersects[0].point.y + 0.3;
 
     }
 
@@ -176,7 +174,7 @@ var update = function(){
 
     camera.lookAt(new THREE.Vector3(
         meshCurr.x,
-        meshCurr.y+1,
+        meshCurr.y+1.75,
         meshCurr.z
     ));
 
@@ -220,6 +218,21 @@ var update = function(){
 
     geometry.verticesNeedUpdate = true;
 
+    ticker ++;
+    if (ticker > 200){
+
+        camOffset.x = (Math.random()*6)-3;
+
+        meshTarget = new THREE.Vector3(
+            (Math.random()*16)+2,
+            0,
+            (Math.random()*16)+2
+        );
+
+        ticker -= 200;
+
+    }
+
 }
 
 var render = function(){
@@ -230,11 +243,11 @@ var render = function(){
 
 var GameLoop = function (){
 
-    requestAnimationFrame(GameLoop);
-
     update();
 
-    composer.render(0.1);
+    requestAnimationFrame(GameLoop);
+
+    composer.render(1.0);
 
 }
 
