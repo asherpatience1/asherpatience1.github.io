@@ -1,10 +1,10 @@
 const scene = new THREE.Scene();
-{
-  const color = 0x3876E8;
-  const near = 10;
-  const far = 50;
-  scene.fog = new THREE.Fog(color, near, far);
-}
+// {
+//   const color = 0x3876E8;
+//   const near = 10;
+//   const far = 50;
+//   scene.fog = new THREE.Fog(color, near, far);
+// }
 var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 10000);
 
 var renderer = new THREE.WebGLRenderer();
@@ -14,12 +14,12 @@ document.body.appendChild(renderer.domElement);
 renderer.autoClear = false;
 composer = new THREE.EffectComposer(renderer);
 var sunRenderModel = new THREE.RenderPass(scene, camera);
-var effectBloom = new THREE.BloomPass(1, 25, 10);
+var effectBloom = new THREE.BloomPass(1.25, 17.5, 10);
 var sceneRenderModel = new THREE.RenderPass(scene, camera);
 var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
 effectCopy.renderToScreen = true;
 composer.addPass(sunRenderModel);
-// composer.addPass(effectBloom);
+composer.addPass(effectBloom);
 composer.addPass(effectCopy);
 
 // var bokehPass = new THREE.BokehPass( scene, camera, {
@@ -46,9 +46,9 @@ window.addEventListener("resize", function (){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 camera.position.z = 10;
-camera.position.y = 0;
-camera.position.x = 10;
-camera.lookAt(new THREE.Vector3(10,-12,0));
+camera.position.y = 3;
+camera.position.x = 3;
+camera.lookAt(new THREE.Vector3(10,0,0));
 
 // var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
 // scene.add(ambientLight);
@@ -82,7 +82,7 @@ scene.add(sphere1);
 
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
-    color: 0x00316C,
+    color: 0x3C5A98,
     wireframe: true
 });
 
@@ -100,8 +100,8 @@ var smoothRate = 0.025;
 var meshSmoothRate = 0.015;
 var scaler = 0.5;
 var meshTarget = new THREE.Vector3(10,0,10);
-var meshCurr = new THREE.Vector3(0,0,0);
-var camOffset = new THREE.Vector3(0,7,9);
+var meshCurr = new THREE.Vector3(10,0,10);
+var camOffset = new THREE.Vector3(0,3,3);
 var camFollowRate = 0.02;
 var sphereRate = 0.015;
 for (var x = 0;x < xSize;x++){
@@ -146,8 +146,8 @@ var update = function(){
 
         camOffset = new THREE.Vector3(
             (Math.random()*6)-3,
-            ((Math.random()*4)-2)+6,
-            ((Math.random()*4)-2)+8
+            3,
+            3
         );
 
         meshTarget = new THREE.Vector3(
@@ -176,7 +176,7 @@ var update = function(){
 
     camera.lookAt(new THREE.Vector3(
         meshCurr.x,
-        meshCurr.y+3,
+        meshCurr.y+1,
         meshCurr.z
     ));
 
@@ -196,7 +196,7 @@ var update = function(){
 
         var totalDist = startPos[x].distanceTo(new THREE.Vector3(meshCurr.x,0,meshCurr.z));
 
-        var newPos = 3-totalDist;
+        var newPos = 1.5-totalDist;
         // newPos *= 2;
         if (newPos < 0){newPos = 0;}
 
