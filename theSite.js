@@ -73,6 +73,27 @@ function SphereCasts(){
         aboutSphere.position.y = intersects[0].point.y + 0.3;
     }
 
+    var castPos = new THREE.Vector3(contactSphere.position.x,contactSphere.position.y-0.1,contactSphere.position.z);    
+    var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0){
+        contactSphere.position.y = intersects[0].point.y + 0.3;
+    }
+
+    var castPos = new THREE.Vector3(servicesSphere.position.x,servicesSphere.position.y-0.1,servicesSphere.position.z);    
+    var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0){
+        servicesSphere.position.y = intersects[0].point.y + 0.3;
+    }
+
+    var castPos = new THREE.Vector3(industriesSphere.position.x,industriesSphere.position.y-0.1,industriesSphere.position.z);    
+    var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0){
+        industriesSphere.position.y = intersects[0].point.y + 0.3;
+    }
+
 }
 
 var renderer = new THREE.WebGLRenderer();
@@ -161,7 +182,7 @@ var industriesSphereGeo = new THREE.SphereGeometry(0.05, 9, 9);
 var industriesSphereMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: false});
 var industriesSphere = new THREE.Mesh(industriesSphereGeo, industriesSphereMat);
 industriesSphere.position.set(industriesPos.x,industriesPos.y,industriesPos.z);
-scene.add(aboutSphere);
+scene.add(industriesSphere);
 
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
