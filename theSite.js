@@ -240,7 +240,7 @@ for (var x = 0;x < xSize;x++){
 
 }
 
-var plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+var plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
 var loader = new THREE.TextureLoader();
 var plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONABOUT.png'),});
 plnMat.transparent = true;
@@ -248,49 +248,49 @@ var plnAbout = new THREE.Mesh(plnGeo, plnMat);
 scene.add(plnAbout);
 plnAbout.parent = camera;
 
-plnAbout.position.x = -0.15;
+plnAbout.position.x = -0.425;
 plnAbout.position.y = 0.4;
 plnAbout.position.z = -2;
 plnAbout.rotation.x = 0;
 plnAbout.rotation.y = 0;
 plnAbout.rotation.z = 0;
 
-plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
 plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONINDUSTRIES.png'),});
 plnMat.transparent = true;
 var plnIndustries = new THREE.Mesh(plnGeo, plnMat);
 scene.add(plnIndustries);
 plnIndustries.parent = camera;
 
-plnIndustries.position.x = 0.05;
+plnIndustries.position.x = 0.275;
 plnIndustries.position.y = 0.4;
 plnIndustries.position.z = -2;
 plnIndustries.rotation.x = 0;
 plnIndustries.rotation.y = 0;
 plnIndustries.rotation.z = 0;
 
-plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
 plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONCONTACT.png'),});
 plnMat.transparent = true;
 var plnContact = new THREE.Mesh(plnGeo, plnMat);
 scene.add(plnContact);
 plnContact.parent = camera;
 
-plnContact.position.x = 0.15;
+plnContact.position.x = -0.275;
 plnContact.position.y = 0.2;
 plnContact.position.z = -2;
 plnContact.rotation.x = 0;
 plnContact.rotation.y = 0;
 plnContact.rotation.z = 0;
 
-plnGeo = new THREE.PlaneGeometry(0.15,0.15,2,2);
+plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
 plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONSERVICES.png'),});
 plnMat.transparent = true;
 var plnServices = new THREE.Mesh(plnGeo, plnMat);
 scene.add(plnServices);
 plnServices.parent = camera;
 
-plnServices.position.x = -0.05;
+plnServices.position.x = 0.425;
 plnServices.position.y = 0.2;
 plnServices.position.z = -2;
 plnServices.rotation.x = 0;
