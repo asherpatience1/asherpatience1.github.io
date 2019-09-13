@@ -7,7 +7,7 @@ const scene = new THREE.Scene();
 //   const far = 50;
 //   scene.fog = new THREE.Fog(color, near, far);
 // }
-var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 10000);
+var camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 10000);
 
 window.addEventListener( 'mousedown', onMouseMove, false );
 var raycaster = new THREE.Raycaster();
