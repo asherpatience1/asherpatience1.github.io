@@ -1,4 +1,26 @@
 const canvas = document.querySelector('#c');
+infoImage = document.getElementById( 'infoImage' );
+
+var btn1 = document.getElementById('btn1');
+btn1.addEventListener('click', function(ev) {
+    camOffset.x = (Math.random()*6)-3;
+    meshTarget = aboutPos;
+});
+var btn2 = document.getElementById('btn2');
+btn2.addEventListener('click', function(ev) {
+    camOffset.x = (Math.random()*6)-3;
+    meshTarget = contactPos;
+});
+var btn3 = document.getElementById('btn3');
+btn3.addEventListener('click', function(ev) {
+    camOffset.x = (Math.random()*6)-3;
+    meshTarget = industriesPos;
+});
+var btn4 = document.getElementById('btn4');
+btn4.addEventListener('click', function(ev) {
+    camOffset.x = (Math.random()*6)-3;
+    meshTarget = servicesPos;
+});
 
 const scene = new THREE.Scene();
 // {
@@ -13,6 +35,14 @@ window.addEventListener( 'mousedown', onMouseMove, false );
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 
+var pointBoxGeo = new THREE.BoxGeometry( 1, 1, 1 );
+var pointBoxMat = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
+pointBoxMat.transparent = true;
+var pointBox = new THREE.Mesh( pointBoxGeo, pointBoxMat );
+scene.add( pointBox );
+pointBox.scale.x = 0.01;
+pointBox.scale.y = 0.01;
+pointBox.scale.z = 2;
 
 var aboutPos = new THREE.Vector3(5,1,5);
 var contactPos = new THREE.Vector3(14,1,12);
@@ -32,33 +62,7 @@ function onMouseMove( event ) {
 
     for ( var i = 0; i < intersects.length; i++ ) {
 
-        if (intersects[i].object == plnAbout){
-
-            camOffset.x = (Math.random()*6)-3;
-            meshTarget = aboutPos;
-
-        }
-
-        if (intersects[i].object == plnContact){
-
-            camOffset.x = (Math.random()*6)-3;
-            meshTarget = contactPos;
-
-        }
-
-        if (intersects[i].object == plnServices){
-
-            camOffset.x = (Math.random()*6)-3;
-            meshTarget = servicesPos;
-
-        }
-
-        if (intersects[i].object == plnIndustries){
-
-            camOffset.x = (Math.random()*6)-3;
-            meshTarget = industriesPos;
-
-        }
+        // raycast input
 
 	}
 
@@ -70,28 +74,28 @@ function SphereCasts(){
     var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
     var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0){
-        aboutSphere.position.y = intersects[0].point.y + 0.3;
+        aboutSphere.position.y = intersects[0].point.y + 0.7;
     }
 
     var castPos = new THREE.Vector3(contactSphere.position.x,contactSphere.position.y-0.1,contactSphere.position.z);    
     var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
     var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0){
-        contactSphere.position.y = intersects[0].point.y + 0.3;
+        contactSphere.position.y = intersects[0].point.y + 0.7;
     }
 
     var castPos = new THREE.Vector3(servicesSphere.position.x,servicesSphere.position.y-0.1,servicesSphere.position.z);    
     var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
     var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0){
-        servicesSphere.position.y = intersects[0].point.y + 0.3;
+        servicesSphere.position.y = intersects[0].point.y + 0.7;
     }
 
     var castPos = new THREE.Vector3(industriesSphere.position.x,industriesSphere.position.y-0.1,industriesSphere.position.z);    
     var raycaster = new THREE.Raycaster(castPos, new THREE.Vector3(0,-1,0), 0, 100);
     var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0){
-        industriesSphere.position.y = intersects[0].point.y + 0.3;
+        industriesSphere.position.y = intersects[0].point.y + 0.7;
     }
 
 }
@@ -206,7 +210,7 @@ var scaler = 0.5;
 var meshTarget = aboutPos;
 var meshCurr = new THREE.Vector3(10,0,10);
 var camOffset = new THREE.Vector3(0,3,3);
-var camFollowRate = 0.02;
+var camFollowRate = 0.01;
 var sphereRate = 0.015;
 for (var x = 0;x < xSize;x++){
 
@@ -240,73 +244,97 @@ for (var x = 0;x < xSize;x++){
 
 }
 
-var plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
-var loader = new THREE.TextureLoader();
-var plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONABOUT.png'),});
-plnMat.transparent = true;
-var plnAbout = new THREE.Mesh(plnGeo, plnMat);
-scene.add(plnAbout);
-plnAbout.parent = camera;
+function CompSphereDistances(){
 
-plnAbout.position.x = -0.425;
-plnAbout.position.y = 0.4;
-plnAbout.position.z = -2;
-plnAbout.rotation.x = 0;
-plnAbout.rotation.y = 0;
-plnAbout.rotation.z = 0;
+    var sphere1Dist = meshCurr.distanceTo(aboutPos);
+    var sphere2Dist = meshCurr.distanceTo(contactPos);
+    var sphere3Dist = meshCurr.distanceTo(servicesPos);
+    var sphere4Dist = meshCurr.distanceTo(industriesPos);
 
-plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
-plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONINDUSTRIES.png'),});
-plnMat.transparent = true;
-var plnIndustries = new THREE.Mesh(plnGeo, plnMat);
-scene.add(plnIndustries);
-plnIndustries.parent = camera;
+    var nearImage = false;
 
-plnIndustries.position.x = 0.275;
-plnIndustries.position.y = 0.4;
-plnIndustries.position.z = -2;
-plnIndustries.rotation.x = 0;
-plnIndustries.rotation.y = 0;
-plnIndustries.rotation.z = 0;
+    if (sphere1Dist < 3){
 
-plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
-plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONCONTACT.png'),});
-plnMat.transparent = true;
-var plnContact = new THREE.Mesh(plnGeo, plnMat);
-scene.add(plnContact);
-plnContact.parent = camera;
+        nearImage = true;
 
-plnContact.position.x = -0.275;
-plnContact.position.y = 0.2;
-plnContact.position.z = -2;
-plnContact.rotation.x = 0;
-plnContact.rotation.y = 0;
-plnContact.rotation.z = 0;
+        var opac = (3-sphere1Dist)/2;
+        infoImage.src = "TEXTABOUT.png";
+        infoImage.style.opacity = opac.toString();
 
-plnGeo = new THREE.PlaneGeometry(0.6,0.15,2,2);
-plnMat = new THREE.MeshBasicMaterial({map: loader.load('ICONSERVICES.png'),});
-plnMat.transparent = true;
-var plnServices = new THREE.Mesh(plnGeo, plnMat);
-scene.add(plnServices);
-plnServices.parent = camera;
+        pointBox.position.set(aboutSphere.position.x, aboutSphere.position.y, aboutSphere.position.z);
+        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
+        pointBox.lookAt(tempPos);
+        pointBox.translateZ(1);
+        pointBox.material.opacity = opac;
 
-plnServices.position.x = 0.425;
-plnServices.position.y = 0.2;
-plnServices.position.z = -2;
-plnServices.rotation.x = 0;
-plnServices.rotation.y = 0;
-plnServices.rotation.z = 0;
+    }
+    if (sphere2Dist < 3){
+
+        nearImage = true;
+
+        var opac = (3-sphere2Dist)/2;
+        infoImage.src = "TEXTCONTACT.png";
+        infoImage.style.opacity = opac.toString();
+
+        pointBox.position.set(contactSphere.position.x, contactSphere.position.y, contactSphere.position.z);
+        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
+        pointBox.lookAt(tempPos);
+        pointBox.translateZ(1);
+        pointBox.material.opacity = opac;
+
+    }
+    if (sphere3Dist < 3){
+
+        nearImage = true;
+
+        var opac = (3-sphere3Dist)/2;
+        infoImage.src = "TEXTSERVICES.png";
+        infoImage.style.opacity = opac.toString();
+
+        pointBox.position.set(servicesSphere.position.x, servicesSphere.position.y, servicesSphere.position.z);
+        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
+        pointBox.lookAt(tempPos);
+        pointBox.translateZ(1);
+        pointBox.material.opacity = opac;
+
+    }
+    if (sphere4Dist < 3){
+
+        nearImage = true;
+
+        var opac = (3-sphere4Dist)/2;
+        infoImage.src = "TEXTINDUSTRIES.png";
+        infoImage.style.opacity = opac.toString();
+
+        pointBox.position.set(industriesSphere.position.x, industriesSphere.position.y, industriesSphere.position.z);
+        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
+        pointBox.lookAt(tempPos);
+        pointBox.translateZ(1);
+        pointBox.material.opacity = opac;
+
+    }
+
+    if (!nearImage){
+
+        infoImage.style.opacity = "0";
+        pointBox.material.opacity = 0;
+
+    }
+
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var ticker = 0;
 var update = function(){
 
+    CompSphereDistances();
+
     SphereCasts();
 
-    camera.position.x = camera.position.x+(((meshTarget.x+camOffset.x)-camera.position.x)*camFollowRate),
-    camera.position.y = camera.position.y+(((meshTarget.y+camOffset.y)-camera.position.y)*camFollowRate),
-    camera.position.z = camera.position.z+(((meshTarget.z+camOffset.z)-camera.position.z)*camFollowRate)
+    camera.position.x = camera.position.x+(((meshCurr.x+camOffset.x)-camera.position.x)*camFollowRate);
+    camera.position.y = camera.position.y+(((meshCurr.y+camOffset.y)-camera.position.y)*camFollowRate);
+    camera.position.z = camera.position.z+(((meshCurr.z+camOffset.z)-camera.position.z)*camFollowRate);
 
     camera.lookAt(new THREE.Vector3(
         meshCurr.x,
