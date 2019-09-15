@@ -1,5 +1,10 @@
 const canvas = document.querySelector('#c');
 infoImage = document.getElementById( 'infoImage' );
+infoImage.src = "TEXTABOUT.png";
+infoImage.src = "TEXTCONTACT.png";
+infoImage.src = "TEXTINDUSTRIES.png";
+infoImage.src = "TEXTSERVICES.png";
+infoImage.src = "TEXTABOUT.png";
 
 var btn1 = document.getElementById('btn1');
 btn1.addEventListener('click', function(ev) {
