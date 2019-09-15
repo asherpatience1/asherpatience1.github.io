@@ -262,7 +262,7 @@ function CompSphereDistances(){
 
         nearImage = true;
 
-        var opac = (3-sphere1Dist)/2;
+        var opac = (3-sphere1Dist);
         infoImage.src = "TEXTABOUT.png";
         infoImage.style.opacity = opac.toString();
 
@@ -277,7 +277,7 @@ function CompSphereDistances(){
 
         nearImage = true;
 
-        var opac = (3-sphere2Dist)/2;
+        var opac = (3-sphere2Dist);
         infoImage.src = "TEXTCONTACT.png";
         infoImage.style.opacity = opac.toString();
 
@@ -292,7 +292,7 @@ function CompSphereDistances(){
 
         nearImage = true;
 
-        var opac = (3-sphere3Dist)/2;
+        var opac = (3-sphere3Dist);
         infoImage.src = "TEXTSERVICES.png";
         infoImage.style.opacity = opac.toString();
 
@@ -307,7 +307,7 @@ function CompSphereDistances(){
 
         nearImage = true;
 
-        var opac = (3-sphere4Dist)/2;
+        var opac = (3-sphere4Dist);
         infoImage.src = "TEXTINDUSTRIES.png";
         infoImage.style.opacity = opac.toString();
 
