@@ -40,17 +40,8 @@ window.addEventListener( 'mousedown', onMouseMove, false );
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 
-var pointBoxGeo = new THREE.BoxGeometry( 1, 1, 1 );
-var pointBoxMat = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
-pointBoxMat.transparent = true;
-var pointBox = new THREE.Mesh( pointBoxGeo, pointBoxMat );
-scene.add( pointBox );
-pointBox.scale.x = 0.01;
-pointBox.scale.y = 0.01;
-pointBox.scale.z = 2;
-
 var aboutPos = new THREE.Vector3(5,1,5);
-var contactPos = new THREE.Vector3(14,1,12);
+var contactPos = new THREE.Vector3(14,1,15);
 var servicesPos = new THREE.Vector3(16,1,7);
 var industriesPos = new THREE.Vector3(6,1,18);
 
@@ -209,7 +200,7 @@ var xSize = 40;
 var ySize = 70;
 var startPos = [];
 var targetPos = [];
-var smoothRate = 0.025;
+var smoothRate = 0.1;
 var meshSmoothRate = 0.015;
 var scaler = 0.5;
 var meshTarget = aboutPos;
@@ -258,75 +249,50 @@ function CompSphereDistances(){
 
     var nearImage = false;
 
-    if (sphere1Dist < 3){
+    if (sphere1Dist < 2){
 
         nearImage = true;
 
-        var opac = (3-sphere1Dist);
-        opac *= 0.25;
+        var opac = (2-sphere1Dist);
+        // opac *= 0.25;
         infoImage.src = "TEXTABOUT.png";
         infoImage.style.opacity = opac.toString();
 
-        pointBox.position.set(aboutSphere.position.x, aboutSphere.position.y, aboutSphere.position.z);
-        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
-        pointBox.lookAt(tempPos);
-        pointBox.translateZ(1);
-        pointBox.material.opacity = opac;
-
     }
-    if (sphere2Dist < 3){
+    if (sphere2Dist < 2){
 
         nearImage = true;
 
-        var opac = (3-sphere2Dist);
-        opac *= 0.25;
+        var opac = (2-sphere2Dist);
+        // opac *= 0.25;
         infoImage.src = "TEXTCONTACT.png";
         infoImage.style.opacity = opac.toString();
 
-        pointBox.position.set(contactSphere.position.x, contactSphere.position.y, contactSphere.position.z);
-        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
-        pointBox.lookAt(tempPos);
-        pointBox.translateZ(1);
-        pointBox.material.opacity = opac;
-
     }
-    if (sphere3Dist < 3){
+    if (sphere3Dist < 2){
 
         nearImage = true;
 
-        var opac = (3-sphere3Dist);
-        opac *= 0.25;
+        var opac = (2-sphere3Dist);
+        // opac *= 0.25;
         infoImage.src = "TEXTSERVICES.png";
         infoImage.style.opacity = opac.toString();
 
-        pointBox.position.set(servicesSphere.position.x, servicesSphere.position.y, servicesSphere.position.z);
-        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
-        pointBox.lookAt(tempPos);
-        pointBox.translateZ(1);
-        pointBox.material.opacity = opac;
-
     }
-    if (sphere4Dist < 3){
+    if (sphere4Dist < 2){
 
         nearImage = true;
 
-        var opac = (3-sphere4Dist);
-        opac *= 0.25;
+        var opac = (2-sphere4Dist);
+        // opac *= 0.25;
         infoImage.src = "TEXTINDUSTRIES.png";
         infoImage.style.opacity = opac.toString();
-
-        pointBox.position.set(industriesSphere.position.x, industriesSphere.position.y, industriesSphere.position.z);
-        tempPos = new THREE.Vector3(camera.position.x, camera.position.y-1, camera.position.z);
-        pointBox.lookAt(tempPos);
-        pointBox.translateZ(1);
-        pointBox.material.opacity = opac;
 
     }
 
     if (!nearImage){
 
         infoImage.style.opacity = "0";
-        pointBox.material.opacity = 0;
 
     }
 
