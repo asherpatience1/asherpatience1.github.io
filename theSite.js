@@ -1,10 +1,6 @@
 const canvas = document.querySelector('#c');
-infoImage = document.getElementById( 'infoImage' );
-infoImage.src = "TEXTABOUT.png";
-infoImage.src = "TEXTCONTACT.png";
-infoImage.src = "TEXTINDUSTRIES.png";
-infoImage.src = "TEXTSERVICES.png";
-infoImage.src = "TEXTABOUT.png";
+var infoImage = document.getElementById( 'infoImage' );
+infoImage.src = "PANEL.png";
 
 var btn1 = document.getElementById('btn1');
 btn1.addEventListener('click', function(ev) {
@@ -27,6 +23,9 @@ btn4.addEventListener('click', function(ev) {
     meshTarget = servicesPos;
 });
 
+var textBox = document.getElementById("textBox");
+textBox.setAttribute('style', 'white-space: pre;');
+
 const scene = new THREE.Scene();
 // {
 //   const color = 0x3876E8;
@@ -36,14 +35,24 @@ const scene = new THREE.Scene();
 // }
 var camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 10000);
 
+var ptexture = new THREE.TextureLoader().load( "overlay.png" );
+var pgeometry = new THREE.PlaneGeometry( 55, 55, 8 );
+var pmaterial = new THREE.MeshBasicMaterial( {map: ptexture} );
+pmaterial.transparent = true;
+pmaterial.opacity = 1;
+var plane = new THREE.Mesh( pgeometry, pmaterial );
+scene.add( plane );
+plane.lookAt(new THREE.Vector3(0, 100,0));
+plane.position.y = 0.05;
+
 window.addEventListener( 'mousedown', onMouseMove, false );
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 
-var aboutPos = new THREE.Vector3(5,1,5);
-var contactPos = new THREE.Vector3(14,1,15);
-var servicesPos = new THREE.Vector3(16,1,7);
-var industriesPos = new THREE.Vector3(6,1,18);
+var aboutPos = new THREE.Vector3(6,1,6);
+var contactPos = new THREE.Vector3(14,1,14);
+var servicesPos = new THREE.Vector3(14,1,6);
+var industriesPos = new THREE.Vector3(6,1,14);
 
 function onMouseMove( event ) {
 
@@ -186,7 +195,7 @@ scene.add(industriesSphere);
 
 var geometry = new THREE.Geometry();
 material = new THREE.MeshBasicMaterial({
-    color: 0x3C5A98,
+    color: 0x3b5998,
     wireframe: true
 });
 
@@ -205,7 +214,7 @@ var meshSmoothRate = 0.015;
 var scaler = 0.5;
 var meshTarget = aboutPos;
 var meshCurr = new THREE.Vector3(10,0,10);
-var camOffset = new THREE.Vector3(0,3,3);
+var camOffset = new THREE.Vector3(0,3,5);
 var camFollowRate = 0.01;
 var sphereRate = 0.015;
 for (var x = 0;x < xSize;x++){
@@ -240,6 +249,8 @@ for (var x = 0;x < xSize;x++){
 
 }
 
+var nearImage = false;
+
 function CompSphereDistances(){
 
     var sphere1Dist = meshCurr.distanceTo(aboutPos);
@@ -247,61 +258,149 @@ function CompSphereDistances(){
     var sphere3Dist = meshCurr.distanceTo(servicesPos);
     var sphere4Dist = meshCurr.distanceTo(industriesPos);
 
-    var nearImage = false;
+    var farAway = true;
 
     if (sphere1Dist < 2){
+
+        farAway = false;
+
+        if (!nearImage){
+
+            currContent = "";
+            nextContent = content1;
+            textBox.textContent = "";
+
+        }
 
         nearImage = true;
 
         var opac = (2-sphere1Dist);
         // opac *= 0.25;
-        infoImage.src = "TEXTABOUT.png";
+        // infoImage.src = "TEXTABOUT.png";
         infoImage.style.opacity = opac.toString();
+        textBox.style.opacity = opac.toString();
 
     }
     if (sphere2Dist < 2){
+
+        farAway = false;
+
+        if (!nearImage){
+
+            currContent = "";
+            nextContent = content2;
+            textBox.textContent = "";
+
+        }
 
         nearImage = true;
 
         var opac = (2-sphere2Dist);
         // opac *= 0.25;
-        infoImage.src = "TEXTCONTACT.png";
+        // infoImage.src = "TEXTCONTACT.png";
         infoImage.style.opacity = opac.toString();
+        textBox.style.opacity = opac.toString();
 
     }
     if (sphere3Dist < 2){
+
+        farAway = false;
+
+        if (!nearImage){
+
+            currContent = "";
+            nextContent = content3;
+            textBox.textContent = "";
+
+        }
 
         nearImage = true;
 
         var opac = (2-sphere3Dist);
         // opac *= 0.25;
-        infoImage.src = "TEXTSERVICES.png";
+        // infoImage.src = "TEXTSERVICES.png";
         infoImage.style.opacity = opac.toString();
+        textBox.style.opacity = opac.toString();
 
     }
     if (sphere4Dist < 2){
+
+        farAway = false;
+
+        if (!nearImage){
+
+            currContent = "";
+            nextContent = content4;
+            textBox.textContent = "";
+
+        }
 
         nearImage = true;
 
         var opac = (2-sphere4Dist);
         // opac *= 0.25;
-        infoImage.src = "TEXTINDUSTRIES.png";
+        // infoImage.src = "TEXTINDUSTRIES.png";
         infoImage.style.opacity = opac.toString();
+        textBox.style.opacity = opac.toString();
 
     }
 
-    if (!nearImage){
+    if (farAway){
+
+        nearImage = false;
 
         infoImage.style.opacity = "0";
+        textBox.style.opacity = "0";
 
     }
 
 }
 
+var ticker = 0;
+var loopTimer = 25;
+var nextContent = "";
+var currContent = "";
+var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[];',./<>?:{}";
+
+var content1 = "ABOUT\r\n\r\nNAME        > ASHER PATIENCE\r\nAGE         > 33\r\nNATIONALITY > AUSTRALIAN\r\nLOCATION    > OCEANIA + ASIA\r\nOCCUPATION  > SOFTWARE DEVELOPER\r\n\r\nINTERESTS\r\n    > PROGRAMMING\r\n    > FUTURE TECH\r\n    > GAME DEVELOPMENT\r\n    > SPATIAL DATA\r\n    > MARTIAL ARTS"; 
+var content2 = "SKILLS\r\n\r\n* SPATIAL DATA\r\n    > POINT CLOUDS\r\n    > LASER SCANNING\r\n    > PHOTOGRAMMETRY\r\n    > PROCEDURAL GEOMETRY\r\n* PROGRAMMING\r\n    > C#\r\n    > JS\r\n* FRAMEWORKS & ENGINES\r\n    > UNITY3D\r\n    > .NET\r\n    > MONO\r\n    > NODEJS\r\n    > WEBGL\r\n    > THREEJS"; 
+var content3 = "// THIS WILL EVENTUALLY BE FOR DEMOS\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nWORKING ON IT..."; 
+var content4 = "CONTACT\r\n\r\nEMAIL   >>  ASHERPATIENCE1@GMAIL.COM\r\nCOMPANY >>  WWW.DIOVEC.COM"; 
+
+setTimeout("ContentLoop()", loopTimer); 
+
+function ContentLoop(){
+
+    textBox.style.fontSize = "24";
+
+    if (nextContent.length > 0){
+
+        currContent = currContent +  nextContent.charAt(0);
+
+        nextContent = nextContent.substring(1);
+
+        textBox.textContent = currContent + characters.charAt(Math.floor(Math.random()*characters.length))+
+        characters.charAt(Math.floor(Math.random()*characters.length))+
+        characters.charAt(Math.floor(Math.random()*characters.length));
+
+        if (nextContent.length < 1){
+
+            textBox.textContent = textBox.textContent.substring(0,textBox.textContent.length-3);
+
+        }
+
+    }
+
+    setTimeout("ContentLoop()", loopTimer); 
+
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var ticker = 0;
 var update = function(){
+
+    plane.position.x = meshCurr.x;
+    plane.position.z = meshCurr.z;
 
     CompSphereDistances();
 

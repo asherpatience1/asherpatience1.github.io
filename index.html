@@ -11,12 +11,34 @@
                 margin: 0;
 
             }
+
+            @font-face {
+            
+                font-family: myFont;
+                src: url(monogram_extended.ttf);
+            
+            } 
+
+            .textBox{
+
+                position: absolute;
+                top: 75%;
+                left: 50%;
+                text-align: left;
+                transform: translate(-50%,-50%);
+                z-index: 10;
+                color: #3b5998;
+                font-family: myFont;
+                text-shadow: 1px 2px #071647;
+                height: 40%;
+                width: 30%;
+            }
               
             .logo1{
 
                 position: absolute;
                 top: 13%;
-                left: 53%;
+                left: 50%;
                 text-align: center;
                 display: block;
                 transform: translate(-50%,-50%);
@@ -82,7 +104,7 @@
 
         <title>
 
-            DIOVEC - Software & Spatial
+            Asher Patience - Software Developer
 
         </title>
 
@@ -97,6 +119,8 @@
 
     <body id="c">
 
+        <font class="textBox" id="textBox" font-size="24px">TESTING</font>
+
         <logo1><img src="newLogo.png" alt="DIOVEC_logo" style=
             "max-width:700px;
             max-height:180px;
@@ -104,17 +128,18 @@
             width:auto;" 
             class="logo1" align="middle"></logo1>
 
-        <info1><img id="infoImage" src="TEXTABOUT.png" style=
+        <info1><img id="infoImage" src="PANEL.png" style=
             "max-width:80%;
             max-height:50%;
+            min-height:50%;
             height:auto;
             width:auto;"
             class="infoClass" align="middle"></info1>
 
-        <input id="btn1" class="btn1" type="image" src="ICONABOUT.png" alt="ABOUT" style="height:6%">
-        <input id="btn2" class="btn2" type="image" src="ICONCONTACT.png" alt="CONTACT" style="height:6%">
-        <input id="btn3" class="btn3" type="image" src="ICONINDUSTRIES.png" alt="INDUSTRIES" style="height:6%">
-        <input id="btn4" class="btn4" type="image" src="ICONSERVICES.png" alt="SERVICES" style="height:6%">
+        <input id="btn1" class="btn1" type="image" src="btnAbout.png" alt="ABOUT" style="height:6%">
+        <input id="btn2" class="btn2" type="image" src="btnSkills.png" alt="SKILLS" style="height:6%">
+        <input id="btn3" class="btn3" type="image" src="btnContact.png" alt="CONTACT" style="height:6%">
+        <input id="btn4" class="btn4" type="image" src="btnVoid.png" alt="VOID" style="height:6%">
 
         <script src = "three.js"></script>
         <script src = "OBJLoader.js"></script>
