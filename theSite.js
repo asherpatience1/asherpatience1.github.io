@@ -362,7 +362,7 @@ var nextContent = "";
 var currContent = "";
 var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[];',./<>?:{}";
 
-var content1 = "ABOUT\r\n\r\nNAME        > ASHER PATIENCE\r\nAGE         > 33\r\nNATIONALITY > AUSTRALIAN\r\nLOCATION    > OCEANIA + ASIA\r\nOCCUPATION  > SOFTWARE DEVELOPER\r\n\r\nINTERESTS\r\n    > PROGRAMMING\r\n    > FUTURE TECH\r\n    > GAME DEVELOPMENT\r\n    > SPATIAL DATA\r\n    > MARTIAL ARTS"; 
+var content1 = "ABOUT\r\n\r\nNAME        > ASHER PATIENCE\r\nAGE         > 35\r\nNATIONALITY > AUSTRALIAN\r\nLOCATION    > OCEANIA + ASIA\r\nOCCUPATION  > SOFTWARE DEVELOPER\r\n\r\nINTERESTS\r\n    > PROGRAMMING\r\n    > FUTURE TECH\r\n    > GAME DEVELOPMENT\r\n    > SPATIAL DATA\r\n    > MARTIAL ARTS"; 
 var content2 = "SKILLS\r\n\r\n* SPATIAL DATA\r\n    > POINT CLOUDS\r\n    > LASER SCANNING\r\n    > PHOTOGRAMMETRY\r\n    > PROCEDURAL GEOMETRY\r\n* PROGRAMMING\r\n    > C#\r\n    > JS\r\n* FRAMEWORKS & ENGINES\r\n    > UNITY3D\r\n    > .NET\r\n    > MONO\r\n    > NODEJS\r\n    > WEBGL\r\n    > THREEJS"; 
 var content3 = "// THIS WILL EVENTUALLY BE FOR DEMOS\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nWORKING ON IT..."; 
 var content4 = "CONTACT\r\n\r\nEMAIL   >>  ASHERPATIENCE1@GMAIL.COM\r\nCOMPANY >>  WWW.DIOVEC.COM"; 
